@@ -118,7 +118,7 @@
 
       choices.forEach(letter => {
         const img = document.createElement("img");
-        img.src = `images/${letter}.png`;
+        img.src = `images/${letter.toLowerCase()}.png`; // <-- lowercase file names
         img.alt = letter;
         img.className = "balloon";
         img.onclick = () => handleClick(letter, img);
