@@ -126,8 +126,11 @@
       { name: "GOLD", code: "gold" }
     ];
 
-    const yaySound = new Audio("sounds/yay.mp3");
-    const oopsSound = new Audio("sounds/oops.mp3");
+    const yaySound = new Audio("sounds/correct.mp3");
+    const oopsSound = new Audio("sounds/wrong.mp3");
+
+    yaySound.preload = "auto";
+    oopsSound.preload = "auto";
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
