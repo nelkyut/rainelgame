@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rainel Balloon Pop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Luckiest Guy', cursive;
+      background: url('rainel.jpg') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      font-size: 3em;
+      text-shadow: 3px 3px #ff66cc;
+      margin: 20px;
+    }
+
+    #question {
+      font-size: 2em;
+      margin: 10px;
+      color: yellow;
+      text-shadow: 2px 2px #000;
+    }
+
+    .balloons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .balloon {
+      width: 120px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .balloon:hover {
+      transform: scale(1.2);
+    }
+
+    #scoreBoard {
+      font-size: 1.5em;
+      margin: 10px;
+      color: #fff8c5;
+    }
+
+    #menuButton {
+      margin: 20px auto;
+      padding: 10px 25px;
+      background-color: #ff66cc;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 1.2em;
+      box-shadow: 2px 2px 5px #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #menuButton:hover {
+      background-color: #ff3399;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #ffccee;
+      text-shadow: 1px 1px #000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎈 Rainel Balloon Pop!</h1>
+  <div id="question">Find the letter: <span id="targetLetter">A</span></div>
+  <div class="balloons" id="balloonContainer"></div>
+  <div id="scoreBoard">Score: 0</div>
+
+  <button id="menuButton" onclick="location.href='index.html'">🔙 Back to Menu</button>
+
+  <footer>Rainel Berboso Rivera © 2025</footer>
+
+  <audio id="popSound" src="sounds/pop.mp3"></audio>
+
+  <script>
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const targetSpan = document.getElementById('targetLetter');
+    const container = document.getElementById('balloonContainer');
+    const scoreBoard = document.getElementById('scoreBoard');
+    const popSound = document.getElementById('popSound');
+
+    let score = 0;
+    let targetLetter = "";
+
+    function getRandomLetters(count) {
+      const shuffled = [...letters].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    }
+
+    function pickTarget(choices) {
+      return choices[Math.floor(Math.random() * choices.length)];
+    }
+
+    function createBalloons() {
+      container.innerHTML = "";
+      const choices = getRandomLetters(6);
+      targetLetter = pickTarget(choices);
+      targetSpan.textContent = targetLetter;
+
+      choices.forEach(letter => {
+        const img = document.createElement("img");
+        img.src = `images/${letter}.png`;
+        img.alt = letter;
+        img.className = "balloon";
+        img.onclick = () => handleClick(letter, img);
+        container.appendChild(img);
+      });
+    }
+
+    function showConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function handleClick(letter, img) {
+      if (letter === targetLetter) {
+        popSound.currentTime = 0;
+        popSound.play();
+        img.style.visibility = "hidden";
+        score++;
+        scoreBoard.textContent = "Score: " + score;
+        showConfetti();
+        setTimeout(createBalloons, 1000);
+      }
+    }
+
+    createBalloons();
+  </script>
+</body>
+</html>
