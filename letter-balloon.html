@@ -90,6 +90,8 @@
   <footer>Rainel Berboso Rivera © 2025</footer>
 
   <audio id="popSound" src="sounds/pop.mp3"></audio>
+  <audio id="correctSound" src="sounds/correct.mp3"></audio>
+  <audio id="wrongSound" src="sounds/wrong.mp3"></audio>
 
   <script>
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -97,6 +99,8 @@
     const container = document.getElementById('balloonContainer');
     const scoreBoard = document.getElementById('scoreBoard');
     const popSound = document.getElementById('popSound');
+    const correctSound = document.getElementById('correctSound');
+    const wrongSound = document.getElementById('wrongSound');
 
     let score = 0;
     let targetLetter = "";
@@ -118,7 +122,7 @@
 
       choices.forEach(letter => {
         const img = document.createElement("img");
-        img.src = `images/${letter.toLowerCase()}.png`; // <-- lowercase file names
+        img.src = `images/${letter.toLowerCase()}.png`;
         img.alt = letter;
         img.className = "balloon";
         img.onclick = () => handleClick(letter, img);
@@ -136,6 +140,8 @@
 
     function handleClick(letter, img) {
       if (letter === targetLetter) {
+        correctSound.currentTime = 0;
+        correctSound.play();
         popSound.currentTime = 0;
         popSound.play();
         img.style.visibility = "hidden";
@@ -143,6 +149,9 @@
         scoreBoard.textContent = "Score: " + score;
         showConfetti();
         setTimeout(createBalloons, 1000);
+      } else {
+        wrongSound.currentTime = 0;
+        wrongSound.play();
       }
     }
 
