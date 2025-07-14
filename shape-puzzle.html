@@ -115,6 +115,9 @@
   <button class="back-btn" onclick="window.location.href='index.html'">← Back to Menu</button>
   <footer>Rainel Berboso Rivera © 2025</footer>
 
+  <!-- 🔊 Background Music -->
+  <audio id="bgMusic" src="sounds/shape-bgm.mp3" autoplay loop></audio>
+
   <script>
     const shapes = [
       { name: "circle", icon: "⚪" }, { name: "square", icon: "🟥" }, { name: "triangle", icon: "🔺" },
@@ -193,6 +196,15 @@
         origin: { y: 0.6 }
       });
     }
+
+    // 🔊 Autoplay background music on load (mobile fallback)
+    window.addEventListener('load', () => {
+      const bgMusic = document.getElementById('bgMusic');
+      bgMusic.volume = 0.3;
+      bgMusic.play().catch(() => {
+        document.body.addEventListener('click', () => bgMusic.play(), { once: true });
+      });
+    });
 
     loadNextRound();
   </script>
