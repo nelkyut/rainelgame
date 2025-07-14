@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rainel Shape Puzzle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: url('images/rainel.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Luckiest Guy', cursive;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin: 20px 0 10px;
+      font-size: 2.6em;
+      text-shadow: 4px 4px #000, 6px 6px #ff9ee9;
+      color: #ffe0f8;
+    }
+
+    .target {
+      font-size: 1.6em;
+      margin: 10px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .game-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .shape-btn {
+      width: 80px;
+      height: 80px;
+      font-size: 2em;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(to bottom, #ff99cc, #d178ff);
+      color: white;
+      box-shadow: inset 0 0 10px #ffb3f0, 0 4px 10px rgba(0,0,0,0.3);
+      text-shadow: 2px 2px #000;
+      transition: transform 0.2s;
+    }
+
+    .shape-btn:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    .back-btn {
+      margin: 30px auto 10px;
+      padding: 14px 50px;
+      background: linear-gradient(145deg, #ff85c1, #ff66cc);
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      width: fit-content;
+    }
+
+    .back-btn:hover {
+      background: linear-gradient(145deg, #ff66cc, #ff85c1);
+      transform: scale(1.03);
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #ffeef8;
+      text-shadow: 2px 2px #c14284;
+    }
+
+    #result {
+      font-size: 1.4em;
+      margin-top: 10px;
+      text-shadow: 2px 2px black;
+    }
+
+    @media (max-width: 500px) {
+      .shape-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 Rainel Shape Puzzle</h1>
+  <div class="target" id="target">Find: </div>
+  <div class="game-area" id="buttons"></div>
+  <div id="result"></div>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">← Back to Menu</button>
+  <footer>Rainel Berboso Rivera © 2025</footer>
+
+  <script>
+    const shapes = [
+      { name: "circle", icon: "⚪" }, { name: "square", icon: "🟥" }, { name: "triangle", icon: "🔺" },
+      { name: "star", icon: "⭐" }, { name: "heart", icon: "❤️" }, { name: "cat", icon: "🐱" },
+      { name: "dog", icon: "🐶" }, { name: "fish", icon: "🐟" }, { name: "cow", icon: "🐮" },
+      { name: "apple", icon: "🍎" }, { name: "banana", icon: "🍌" }, { name: "car", icon: "🚗" },
+      { name: "train", icon: "🚂" }, { name: "bus", icon: "🚌" }, { name: "sun", icon: "☀️" },
+      { name: "moon", icon: "🌙" }, { name: "tree", icon: "🌳" }, { name: "flower", icon: "🌸" },
+      { name: "cake", icon: "🎂" }, { name: "balloon", icon: "🎈" }, { name: "book", icon: "📖" },
+      { name: "phone", icon: "📱" }, { name: "tv", icon: "📺" }, { name: "duck", icon: "🦆" },
+      { name: "frog", icon: "🐸" }, { name: "horse", icon: "🐴" }, { name: "rabbit", icon: "🐰" },
+      { name: "turtle", icon: "🐢" }, { name: "elephant", icon: "🐘" }, { name: "lion", icon: "🦁" },
+      { name: "monkey", icon: "🐵" }, { name: "panda", icon: "🐼" }, { name: "penguin", icon: "🐧" },
+      { name: "pizza", icon: "🍕" }, { name: "burger", icon: "🍔" }, { name: "ice cream", icon: "🍦" },
+      { name: "cookie", icon: "🍪" }, { name: "bread", icon: "🍞" }, { name: "egg", icon: "🥚" },
+      { name: "chicken", icon: "🐔" }, { name: "bee", icon: "🐝" }, { name: "snail", icon: "🐌" },
+      { name: "starfish", icon: "🌟" }, { name: "crab", icon: "🦀" }, { name: "octopus", icon: "🐙" },
+      { name: "rocket", icon: "🚀" }, { name: "ball", icon: "⚽" }, { name: "drum", icon: "🥁" },
+      { name: "guitar", icon: "🎸" }, { name: "microphone", icon: "🎤" }, { name: "paint", icon: "🎨" }
+    ];
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function loadNextRound() {
+      const options = shuffle([...shapes]).slice(0, 6);
+      const targetShape = options[Math.floor(Math.random() * options.length)];
+
+      document.getElementById("target").innerText = `Find: ${targetShape.icon} ${capitalize(targetShape.name)}`;
+      const buttonsDiv = document.getElementById("buttons");
+      buttonsDiv.innerHTML = '';
+
+      options.forEach(shape => {
+        const btn = document.createElement("button");
+        btn.className = "shape-btn";
+        btn.innerText = shape.icon;
+        btn.onclick = () => checkAnswer(shape.name, targetShape.name);
+        buttonsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(choice, answer) {
+      const result = document.getElementById("result");
+      if (choice === answer) {
+        playSound('correct');
+        showConfetti();
+        result.innerHTML = "✅ Correct!";
+        setTimeout(() => {
+          result.innerHTML = '';
+          loadNextRound();
+        }, 1000);
+      } else {
+        playSound('wrong');
+        result.innerHTML = "❌ Try again!";
+      }
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function playSound(name) {
+      const audio = new Audio('sounds/' + name + '.mp3');
+      audio.play();
+    }
+
+    function showConfetti() {
+      confetti({
+        particleCount: 80,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+
+    loadNextRound();
+  </script>
+</body>
+</html>

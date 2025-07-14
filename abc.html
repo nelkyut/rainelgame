@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rainel ABC App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: url('rainel1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Luckiest Guy', cursive;
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 20px 0;
+      font-size: 2.8em;
+      text-shadow: 4px 4px #000, 6px 6px #ff9ee9;
+      color: #ffe0f8;
+    }
+
+    .letters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      max-width: 800px;
+    }
+
+    button {
+      width: 60px;
+      height: 60px;
+      margin: 10px;
+      font-size: 1.5em;
+      border-radius: 20px;
+      background: linear-gradient(to bottom, #ff99cc, #d178ff);
+      border: 3px solid #fff;
+      box-shadow: inset 0 0 10px #ffb3f0, 0 4px 10px rgba(0,0,0,0.3);
+      color: white;
+      text-shadow: 2px 2px #000;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+      background: linear-gradient(to bottom, #ffc6f5, #d1aaff);
+    }
+
+    .back-btn {
+      margin: 30px 0 10px;
+      padding: 14px 50px;
+      background: linear-gradient(145deg, #ff85c1, #ff66cc);
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      width: fit-content;
+    }
+
+    .back-btn:hover {
+      background: linear-gradient(145deg, #ff66cc, #ff85c1);
+      transform: scale(1.03);
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 15px 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #ffeef8;
+      text-shadow: 2px 2px #c14284;
+    }
+
+    @media (max-width: 400px) {
+      h1 { font-size: 2em; }
+      button { width: 50px; height: 50px; font-size: 1.2em; }
+      .back-btn { font-size: 1em; padding: 12px 30px; }
+      footer { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Rainel's ABC Wonderland</h1>
+
+  <div class="letters">
+    <script>
+      let currentAudio;
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+      letters.forEach(letter => {
+        document.write(`<button onclick="playSound('${letter}')">${letter}</button>`);
+      });
+
+      function playSound(letter) {
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+        }
+
+        currentAudio = new Audio('sounds/' + letter.toLowerCase() + '.mp3');
+        currentAudio.play().catch(e => {
+          console.log("Playback error: ", e);
+        });
+      }
+    </script>
+  </div>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">← Back to Menu</button>
+
+  <footer>
+    Rainel Berboso Rivera © 2025
+  </footer>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎨 Rainel's Color Match</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: url('rainel1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Luckiest Guy', 'Comic Sans MS', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      color: white;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 3em;
+      text-shadow: 3px 3px #ff66cc;
+    }
+
+    .question {
+      margin: 20px;
+      font-size: 2em;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px 30px;
+      border-radius: 20px;
+      color: #fff;
+      text-shadow: 2px 2px #c14284;
+    }
+
+    .feedback {
+      font-size: 2.2em;
+      margin: 10px;
+      height: 60px;
+      text-shadow: 1px 1px #000;
+    }
+
+    .colors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      max-width: 800px;
+    }
+
+    .color-btn {
+      width: 90px;
+      height: 90px;
+      border: 3px solid white;
+      border-radius: 20px;
+      box-shadow: 2px 2px 10px #333;
+      transition: transform 0.2s;
+    }
+
+    .color-btn:active {
+      transform: scale(0.95);
+    }
+
+    .back-btn {
+      margin: 20px 0;
+      padding: 14px 50px;
+      background: linear-gradient(145deg, #ff85c1, #ff66cc);
+      border: none;
+      border-radius: 14px;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px #b94b94;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffeef8;
+      text-shadow: 2px 2px #c14284;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎨 Rainel's Color Match</h1>
+  <div class="question" id="question">Which one is RED?</div>
+  <div class="feedback" id="feedback"> </div>
+
+  <div class="colors" id="color-buttons"></div>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">← Back to Menu</button>
+
+  <footer>Rainel Berboso Rivera © 2025</footer>
+
+  <script>
+    const colors = [
+      { name: "RED", code: "red" },
+      { name: "BLUE", code: "blue" },
+      { name: "YELLOW", code: "yellow" },
+      { name: "GREEN", code: "green" },
+      { name: "ORANGE", code: "orange" },
+      { name: "PINK", code: "pink" },
+      { name: "PURPLE", code: "purple" },
+      { name: "BROWN", code: "#8B4513" },
+      { name: "GRAY", code: "gray" },
+      { name: "BLACK", code: "black" },
+      { name: "WHITE", code: "white" },
+      { name: "SKY BLUE", code: "skyblue" },
+      { name: "LIME", code: "lime" },
+      { name: "CYAN", code: "cyan" },
+      { name: "MAGENTA", code: "magenta" },
+      { name: "GOLD", code: "gold" }
+    ];
+
+    const yaySound = new Audio("sounds/yay.mp3");
+    const oopsSound = new Audio("sounds/oops.mp3");
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function showConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff66cc', '#ff99cc', '#ffe6f0']
+      });
+    }
+
+    function newRound() {
+      const target = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById("question").innerText = `Which one is ${target.name}?`;
+
+      const options = shuffle([
+        target,
+        ...shuffle(colors.filter(c => c !== target)).slice(0, 2)
+      ]);
+
+      const container = document.getElementById("color-buttons");
+      const feedback = document.getElementById("feedback");
+      container.innerHTML = "";
+      feedback.innerText = "";
+
+      options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "color-btn";
+        btn.style.background = option.code;
+        btn.onclick = () => {
+          if (option.name === target.name) {
+            yaySound.currentTime = 0;
+            yaySound.play();
+            feedback.innerText = "💖 Correct!";
+            showConfetti();
+            setTimeout(newRound, 1200);
+          } else {
+            oopsSound.currentTime = 0;
+            oopsSound.play();
+            feedback.innerText = "❌ Try again!";
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    newRound();
+  </script>
+</body>
+</html>
